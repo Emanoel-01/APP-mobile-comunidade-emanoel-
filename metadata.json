@@ -1,0 +1,6 @@
+{
+  "name": "Comunidade Business 4.0",
+  "description": "App Android nativo da Comunidade Business 4.0 AmorimTech com Feed, Fórum, Cursos, Materiais e Perfil.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

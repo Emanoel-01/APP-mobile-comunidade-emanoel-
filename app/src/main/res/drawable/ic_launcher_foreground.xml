@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Safe zone is centered within 66dp (x: 21 to 87, y: 21 to 87) -->
+    
+    <!-- Outer Shield / Hexagonal Emblem -->
+    <path
+        android:fillColor="#22B5642A"
+        android:pathData="M54,24 L78,38 L78,68 L54,82 L30,68 L30,38 Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B5642A"
+        android:strokeWidth="2.5"
+        android:pathData="M54,24 L78,38 L78,68 L54,82 L30,68 L30,38 Z" />
+
+    <!-- Architectural Building Columns / Modern Business 4.0 bars -->
+    <!-- Column 1 (Left) -->
+    <path
+        android:fillColor="#B77D1A"
+        android:pathData="M39,52 L45,52 L45,69 L39,69 Z" />
+    <!-- Column 2 (Center - Tallest) -->
+    <path
+        android:fillColor="#FBF8F2"
+        android:pathData="M51,40 L57,40 L57,69 L51,69 Z" />
+    <!-- Column 3 (Right) -->
+    <path
+        android:fillColor="#B5642A"
+        android:pathData="M63,46 L69,46 L69,69 Z" />
+
+    <!-- Base Foundation Beam -->
+    <path
+        android:fillColor="#FBF8F2"
+        android:pathData="M36,70 L72,70 L72,73 L36,73 Z" />
+
+    <!-- Technical Connectivity Network Node / 4.0 Apex -->
+    <path
+        android:fillColor="#B77D1A"
+        android:pathData="M54,30 A4,4 0 1,1 54,38 A4,4 0 1,1 54,30" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B77D1A"
+        android:strokeWidth="1.5"
+        android:pathData="M54,38 L54,40" />
+</vector>
