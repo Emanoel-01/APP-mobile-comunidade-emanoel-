@@ -1,8 +1,8 @@
 package br.com.amorimtech.comunidade.ui.screens.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,66 +19,49 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.CardMembership
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.MilitaryTech
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Verified
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.amorimtech.comunidade.data.mock.DadosMock
 import br.com.amorimtech.comunidade.data.model.PerfilUsuario
-import br.com.amorimtech.comunidade.ui.components.AuthorAvatar
 import br.com.amorimtech.comunidade.ui.theme.Amber
 import br.com.amorimtech.comunidade.ui.theme.Copper
 import br.com.amorimtech.comunidade.ui.theme.IvoryBackground
-import br.com.amorimtech.comunidade.ui.theme.IvoryBorder
-import br.com.amorimtech.comunidade.ui.theme.IvorySurface
-import br.com.amorimtech.comunidade.ui.theme.IvorySurfaceVariant
 import br.com.amorimtech.comunidade.ui.theme.NavyDark
-import br.com.amorimtech.comunidade.ui.theme.NavyLight
-import br.com.amorimtech.comunidade.ui.theme.NavySurface
-import br.com.amorimtech.comunidade.ui.theme.SuccessGreen
-import br.com.amorimtech.comunidade.ui.theme.TextMuted
-import br.com.amorimtech.comunidade.ui.theme.TextOnDark
-import br.com.amorimtech.comunidade.ui.theme.TextPrimary
-import br.com.amorimtech.comunidade.ui.theme.TextSecondary
+import br.com.amorimtech.comunidade.ui.theme.SleekBorder
+import br.com.amorimtech.comunidade.ui.theme.SleekBorderSubtle
+import br.com.amorimtech.comunidade.ui.theme.SleekGray400
+import br.com.amorimtech.comunidade.ui.theme.SleekGray500
+import br.com.amorimtech.comunidade.ui.theme.SleekIconBg
+import br.com.amorimtech.comunidade.ui.theme.SleekTextBody
 
 @Composable
 fun ProfileScreen(
     usuario: PerfilUsuario,
     modifier: Modifier = Modifier
 ) {
-    var activeDialogMessage by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = modifier
@@ -86,388 +69,374 @@ fun ProfileScreen(
             .background(IvoryBackground),
         contentPadding = PaddingValues(bottom = 96.dp)
     ) {
-        // Hero Profile Card
+        // 1. Cabeçalho Navy com avatar, nome, título profissional
         item {
-            ProfileHeroCard(
-                usuario = usuario,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-
-        // Gamification / Level Card
-        item {
-            GamificationCard(
-                usuario = usuario,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-            )
-        }
-
-        // Professional Badges & Certifications
-        item {
-            ProfessionalBadgesCard(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-            )
-        }
-
-        // Menu items
-        item {
-            Spacer(modifier = Modifier.height(10.dp))
             Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(containerColor = IvorySurface),
-                border = androidx.compose.foundation.BorderStroke(1.dp, IvoryBorder),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = NavyDark),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(20.dp)
             ) {
-                Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                    ProfileMenuItem(
-                        icon = Icons.Default.CardMembership,
-                        title = "Meus Certificados",
-                        subtitle = "2 certificados digitais disponíveis",
-                        onClick = { activeDialogMessage = "Certificados de Perícia Judicial 4.0 e Patologias emitidos com autenticidade verificada." }
-                    )
-                    HorizontalDivider(color = IvoryBorder, modifier = Modifier.padding(horizontal = 16.dp))
-                    ProfileMenuItem(
-                        icon = Icons.Default.History,
-                        title = "Minhas Atividades",
-                        subtitle = "Publicações, respostas no fórum e laudos",
-                        onClick = { activeDialogMessage = "Histórico: 6 publicações e 8 respostas técnicas registradas na comunidade." }
-                    )
-                    HorizontalDivider(color = IvoryBorder, modifier = Modifier.padding(horizontal = 16.dp))
-                    ProfileMenuItem(
-                        icon = Icons.Default.Settings,
-                        title = "Configurações da Conta",
-                        subtitle = "Preferências e dados profissionais",
-                        onClick = { activeDialogMessage = "Dados cadastrais vinculados ao CREA-SP 506.842/D." }
-                    )
-                }
-            }
-        }
-    }
-
-    activeDialogMessage?.let { msg ->
-        AlertDialog(
-            onDismissRequest = { activeDialogMessage = null },
-            title = {
-                Text(
-                    text = "Perfil Profissional",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = NavyDark
-                )
-            },
-            text = {
-                Text(text = msg, style = MaterialTheme.typography.bodyMedium, color = TextPrimary)
-            },
-            confirmButton = {
-                Button(
-                    onClick = { activeDialogMessage = null },
-                    colors = ButtonDefaults.buttonColors(containerColor = Copper)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("OK", color = Color.White)
-                }
-            }
-        )
-    }
-}
-
-@Composable
-fun ProfileHeroCard(
-    usuario: PerfilUsuario,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = NavyDark),
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                AuthorAvatar(
-                    autor = DadosMock.autorRoberto,
-                    size = 64.dp
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = usuario.nomeCompleto,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = IvoryBackground
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Icon(
-                            imageVector = Icons.Default.Verified,
-                            contentDescription = "Membro Verificado",
-                            tint = Amber,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                    usuario.tituloProfissional?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = IvorySurfaceVariant
-                        )
-                    }
-                    usuario.creaCau?.let {
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Amber,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Stats grid in Profile
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(NavySurface)
-                    .padding(vertical = 12.dp, horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                ProfileStatColumn(value = "3", label = "Cursos")
-                ProfileStatColumn(value = "12", label = "Fórum")
-                ProfileStatColumn(value = "8", label = "Materiais")
-                ProfileStatColumn(value = "2", label = "Certificados")
-            }
-        }
-    }
-}
-
-@Composable
-fun ProfileStatColumn(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = Amber
-        )
-    }
-}
-
-@Composable
-fun GamificationCard(
-    usuario: PerfilUsuario,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = IvorySurface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, IvoryBorder),
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(18.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(72.dp)
                             .clip(CircleShape)
-                            .background(Amber.copy(alpha = 0.2f)),
+                            .background(Copper)
+                            .border(3.dp, Amber.copy(alpha = 0.5f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "RA",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Text(
+                        text = usuario.nomeCompleto,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = usuario.tituloProfissional ?: "Engenheiro Civil & Perito Judicial",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.75f)
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .background(Copper.copy(alpha = 0.25f))
+                            .border(1.dp, Copper.copy(alpha = 0.6f), RoundedCornerShape(50))
+                            .padding(horizontal = 14.dp, vertical = 6.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Verified,
+                                contentDescription = null,
+                                tint = Amber,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = usuario.nivelAtual ?: "Membro Specialist 4.0",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Seção "DADOS PROFISSIONAIS" com CREA/CAU e CNPJ (claramente não editável)
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 6.dp)
+            ) {
+                Text(
+                    text = "DADOS PROFISSIONAIS",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.4.sp,
+                    color = Copper
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, SleekBorder),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(18.dp)) {
+                        // Linha CREA/CAU
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .background(SleekIconBg),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Badge,
+                                        contentDescription = null,
+                                        tint = NavyDark,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        text = "Registro Profissional",
+                                        fontSize = 11.sp,
+                                        color = SleekGray500
+                                    )
+                                    Text(
+                                        text = usuario.creaCau ?: "CREA-SP 506.842/D",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = NavyDark
+                                    )
+                                }
+                            }
+                            Text(
+                                text = "Homologado",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF059669)
+                            )
+                        }
+
+                        HorizontalDivider(
+                            color = SleekBorderSubtle,
+                            modifier = Modifier.padding(vertical = 14.dp)
+                        )
+
+                        // Linha CNPJ
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .background(SleekIconBg),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Business,
+                                        contentDescription = null,
+                                        tint = NavyDark,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        text = "CNPJ Vinculado",
+                                        fontSize = 11.sp,
+                                        color = SleekGray500
+                                    )
+                                    Text(
+                                        text = usuario.cnpj ?: "35.673.731/0001-82",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = NavyDark
+                                    )
+                                }
+                            }
+                            Text(
+                                text = "Ativo",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF059669)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3. Aviso com ícone de cadeado: "Alteração de dados profissionais só pelo site"
+        item {
+            Surface(
+                color = Color(0xFFFEF3C7).copy(alpha = 0.6f),
+                shape = RoundedCornerShape(12.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFDE68A)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(28.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFD97706).copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Default.MilitaryTech,
-                            contentDescription = null,
-                            tint = Amber,
-                            modifier = Modifier.size(22.dp)
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = "Bloqueado",
+                            tint = Color(0xFFB45309),
+                            modifier = Modifier.size(16.dp)
                         )
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(
-                            text = usuario.nivelAtual ?: "Membro",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = NavyDark
-                        )
-                        Text(
-                            text = "Nível de Gamificação Profissional",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = TextMuted
-                        )
-                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Alteração de dados profissionais só pelo site",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF92400E)
+                    )
                 }
-
-                Text(
-                    text = "${usuario.pontosTotais} pts",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Copper
-                )
             }
+        }
 
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // Level Progress bar
-            LinearProgressIndicator(
-                progress = { 0.77f },
+        // 4. Card de Certificado com timbrado oficial
+        item {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                color = Amber,
-                trackColor = IvorySurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "Specialist (3.850 pts)",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    text = "CERTIFICAÇÃO OFICIAL",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.4.sp,
+                    color = Copper
                 )
-                Text(
-                    text = "Próximo: Master (5.000 pts)",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Copper,
-                    fontWeight = FontWeight.SemiBold
-                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, SleekBorder),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(20.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "CERTIFICADO DE CAPACITAÇÃO",
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp,
+                                    color = Amber
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = "Especialista em Engenharia Diagnóstica 4.0",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = NavyDark
+                                )
+                            }
+                            Icon(
+                                imageVector = Icons.Default.CardMembership,
+                                contentDescription = null,
+                                tint = Copper,
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(14.dp))
+
+                        // Timbrado da Empresa
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(SleekIconBg)
+                                .border(1.dp, SleekBorderSubtle, RoundedCornerShape(10.dp))
+                                .padding(12.dp)
+                        ) {
+                            Column {
+                                Text(
+                                    text = "EMITIDO POR:",
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp,
+                                    color = SleekGray400
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = "Amorim Arquitetura, Tech & Academy",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = NavyDark
+                                )
+                                Text(
+                                    text = "CNPJ: 35.673.731/0001-82",
+                                    fontSize = 11.sp,
+                                    color = SleekTextBody
+                                )
+                                Text(
+                                    text = "Carga Horária: 60 horas • Livro de Registro A-14, Folha 88",
+                                    fontSize = 10.sp,
+                                    color = SleekGray500
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Botão Baixar PDF (simulado)
+                        Button(
+                            onClick = {
+                                Toast.makeText(
+                                    context,
+                                    "Download do certificado PDF iniciado com assinatura digital.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Copper),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp)
+                                .testTag("btn_download_certificado_pdf")
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Default.Download,
+                                    contentDescription = "Baixar",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "Baixar PDF",
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun ProfessionalBadgesCard(modifier: Modifier = Modifier) {
-    Card(
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = IvorySurface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, IvoryBorder),
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(18.dp)) {
-            Text(
-                text = "Selos de Especialidade Reconhecidos",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = NavyDark
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                SpecialtyBadgeItem(title = "Perícias Judiciais", level = "Nível III", modifier = Modifier.weight(1f))
-                SpecialtyBadgeItem(title = "Inspeção NBR 16747", level = "Auditor Líder", modifier = Modifier.weight(1f))
-            }
-        }
-    }
-}
-
-@Composable
-fun SpecialtyBadgeItem(
-    title: String,
-    level: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(IvorySurfaceVariant)
-            .border(1.dp, IvoryBorder, RoundedCornerShape(12.dp))
-            .padding(12.dp)
-    ) {
-        Column {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = Amber,
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = NavyDark
-            )
-            Text(
-                text = level,
-                style = MaterialTheme.typography.bodySmall,
-                color = TextSecondary
-            )
-        }
-    }
-}
-
-@Composable
-fun ProfileMenuItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    title: String,
-    subtitle: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(38.dp)
-                .clip(CircleShape)
-                .background(IvorySurfaceVariant),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = NavyDark,
-                modifier = Modifier.size(20.dp)
-            )
-        }
-        Spacer(modifier = Modifier.width(14.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = TextPrimary
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = TextSecondary
-            )
-        }
-        Icon(
-            imageVector = Icons.Default.ChevronRight,
-            contentDescription = null,
-            tint = TextMuted,
-            modifier = Modifier.size(20.dp)
-        )
     }
 }

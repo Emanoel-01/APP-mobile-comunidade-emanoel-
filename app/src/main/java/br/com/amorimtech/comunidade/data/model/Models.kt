@@ -103,7 +103,73 @@ data class PerfilUsuario(
     val nomeCompleto: String,
     val tituloProfissional: String?,
     val creaCau: String?,
+    val cnpj: String? = "35.673.731/0001-82",
+    val empresaNome: String? = "Amorim Arquitetura, Tech & Academy",
     val avatarUrl: String?,
     val nivelAtual: String?,   // rótulo de gamificação/perfil de acesso
     val pontosTotais: Int = 0
+)
+
+data class Vaga(
+    val id: String,
+    val titulo: String,
+    val empresa: String,
+    val local: String,
+    val tipo: String, // "CLT", "PJ", "Freelance", "Estágio"
+    val descricao: String,
+    val publicadoEm: String,
+    val jaCandidatado: Boolean = false
+)
+
+data class EventoAgenda(
+    val id: String,
+    val titulo: String,
+    val tipo: String, // "Workshop", "Masterclass", "Webinar"
+    val data: String,
+    val local: String, // "Google Meet", presencial etc.
+    val palestrante: String,
+    val descricao: String,
+    val encerrado: Boolean,
+    val inscrito: Boolean = false
+)
+
+data class AgenteCatalogo(
+    val id: String,
+    val nome: String,
+    val descricao: String,
+    val icone: String,
+    val gratuito: Boolean = false
+)
+
+data class ProjetoCredito(
+    val id: String,
+    val nomeProjeto: String,
+    val nomeCliente: String,
+    val tipoOperacao: String, // "terreno_construcao", "construcao", "terreno", "reforma_pf", "condominio"
+    val uf: String,
+    val cidade: String,
+    val status: String, // "rascunho", "concluido"
+    val custoTotal: Double,
+    val valorFinanciavel: Double,
+    val parcelaEstimada: Double?
+)
+
+data class LinhaCreditoMock(
+    val banco: String,
+    val produto: String,
+    val taxaMin: Double,
+    val taxaMax: Double,
+    val prazoMaxAnos: Int,
+    val percentualFinanciamentoMax: Int,
+    val rendaMinima: Double,
+    val idadeMaxima: Int
+)
+
+data class CapituloGuia(
+    val id: String,
+    val numero: Int,
+    val titulo: String,
+    val categoria: String,
+    val resumo: String,
+    val conteudoCompleto: String
 )

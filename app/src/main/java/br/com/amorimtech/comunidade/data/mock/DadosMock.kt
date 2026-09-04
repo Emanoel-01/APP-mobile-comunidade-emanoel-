@@ -1,14 +1,20 @@
 package br.com.amorimtech.comunidade.data.mock
 
+import br.com.amorimtech.comunidade.data.model.AgenteCatalogo
 import br.com.amorimtech.comunidade.data.model.AutorPublico
+import br.com.amorimtech.comunidade.data.model.CapituloGuia
 import br.com.amorimtech.comunidade.data.model.Comentario
 import br.com.amorimtech.comunidade.data.model.Curso
+import br.com.amorimtech.comunidade.data.model.EventoAgenda
+import br.com.amorimtech.comunidade.data.model.LinhaCreditoMock
 import br.com.amorimtech.comunidade.data.model.MaterialItem
 import br.com.amorimtech.comunidade.data.model.ModuloCurso
 import br.com.amorimtech.comunidade.data.model.PerfilUsuario
 import br.com.amorimtech.comunidade.data.model.Post
+import br.com.amorimtech.comunidade.data.model.ProjetoCredito
 import br.com.amorimtech.comunidade.data.model.RespostaForum
 import br.com.amorimtech.comunidade.data.model.TopicoForum
+import br.com.amorimtech.comunidade.data.model.Vaga
 
 /**
  * DadosMock — Repositório de dados fixos em memória para a fase de casca visual.
@@ -605,4 +611,382 @@ object DadosMock {
             temAcesso = true
         )
     )
+
+    // ==========================================
+    // AGENTES DE ENGENHARIA & PERMISSÕES MOCK
+    // ==========================================
+    val agentesCatalogo = listOf(
+        AgenteCatalogo("guia-tipologias", "Guia de Consulta", "Bíblia da Edificação — 41 sistemas construtivos", "book", gratuito = true),
+        AgenteCatalogo("viabiliza-ia", "Viabiliza IA", "Estudo de viabilidade prévia de crédito", "cash"),
+        AgenteCatalogo("reajuste-contrato", "Reajuste de Contrato", "Calcule reajuste pelos índices FGV", "chart"),
+        AgenteCatalogo("calculadora-predimensionamento", "Pré-dimensionamento", "Cálculo instantâneo de lajes, vigas e mais", "ruler"),
+        AgenteCatalogo("checklist-licitacao", "Checklist de Licitação", "Documentação exigida pela Lei 14.133/2021", "list"),
+        AgenteCatalogo("levantamento-quantitativos", "Levant. Quantitativos", "Concreto, forma, aço e demais insumos", "building"),
+        AgenteCatalogo("custos-viabilidade", "Custos & Viabilidade", "Estudo de viabilidade NBR 12.721", "money"),
+        AgenteCatalogo("gerador-canteiro", "Gerador de Canteiro", "Layout e logística de canteiro de obras", "site"),
+        AgenteCatalogo("biblioteca-prompts", "Biblioteca de Prompts", "Prompts prontos para IA", "prompt"),
+        AgenteCatalogo("skills-catalogo", "Skills Claude", "Pacotes de instruções reutilizáveis", "code")
+    )
+
+    val permissoesUsuarioMock = mapOf(
+        "guia-tipologias" to true, // sempre gratuito, nunca bloqueado
+        "viabiliza-ia" to true,
+        "reajuste-contrato" to true,
+        "calculadora-predimensionamento" to false,
+        "checklist-licitacao" to false,
+        "levantamento-quantitativos" to false,
+        "custos-viabilidade" to true,
+        "gerador-canteiro" to false,
+        "biblioteca-prompts" to false,
+        "skills-catalogo" to false
+    )
+
+    // ==========================================
+    // LINHAS DE CRÉDITO IMOBILIÁRIO REAIS
+    // ==========================================
+    val linhasCreditoMock = listOf(
+        LinhaCreditoMock("Caixa Econômica Federal", "Aquisição de Terreno e Construção / Construção Individual (PCI)", 8.50, 11.50, 35, 80, 2500.0, 80),
+        LinhaCreditoMock("Banco do Brasil", "Financiamento Construção Imobiliária Residencial", 9.00, 12.00, 35, 80, 3000.0, 80),
+        LinhaCreditoMock("Bradesco", "Crédito Imobiliário Aquisição de Lote e Construção", 10.50, 12.50, 30, 80, 3500.0, 80),
+        LinhaCreditoMock("Itaú Unibanco", "Crédito Imobiliário Terreno / Mútuo Conjugado de Obras", 10.80, 13.00, 30, 80, 4000.0, 80),
+        LinhaCreditoMock("Santander", "Financiamento Imobiliário Obras e Reformas", 11.20, 13.50, 35, 80, 4000.0, 80),
+        LinhaCreditoMock("Banco Inter", "Construcasa / Financiamento Construção Digital", 9.99, 13.80, 30, 80, 5000.0, 75)
+    )
+
+    // ==========================================
+    // PROJETOS DE CRÉDITO SALVOS (VIABILIZA IA)
+    // ==========================================
+    val projetosCreditoMock = mutableListOf(
+        ProjetoCredito(
+            id = "proj_01",
+            nomeProjeto = "Residência Jardins das Palmeiras",
+            nomeCliente = "Dr. Marcelo Siqueira",
+            tipoOperacao = "terreno_construcao",
+            uf = "SP",
+            cidade = "Campinas",
+            status = "concluido",
+            custoTotal = 850000.0,
+            valorFinanciavel = 680000.0,
+            parcelaEstimada = 6240.0
+        ),
+        ProjetoCredito(
+            id = "proj_02",
+            nomeProjeto = "Edifício Residencial Bella Vista",
+            nomeCliente = "Condomínio Ed. Bella Vista",
+            tipoOperacao = "condominio",
+            uf = "PR",
+            cidade = "Curitiba",
+            status = "rascunho",
+            custoTotal = 420000.0,
+            valorFinanciavel = 336000.0,
+            parcelaEstimada = 3890.0
+        ),
+        ProjetoCredito(
+            id = "proj_03",
+            nomeProjeto = "Casa de Campo Alto da Serra",
+            nomeCliente = "Luciana & Ricardo Albuquerque",
+            tipoOperacao = "construcao",
+            uf = "MG",
+            cidade = "Poços de Caldas",
+            status = "concluido",
+            custoTotal = 590000.0,
+            valorFinanciavel = 472000.0,
+            parcelaEstimada = 4350.0
+        )
+    )
+
+    // ==========================================
+    // VAGAS E OPORTUNIDADES
+    // ==========================================
+    val vagasMock = mutableListOf(
+        Vaga(
+            id = "vaga_01",
+            titulo = "Perito Judicial Assistente Técnico — Patologia de Fachadas",
+            empresa = "Amorim Engenharia & Diagnóstico",
+            local = "São Paulo, SP (Híbrido)",
+            tipo = "PJ",
+            descricao = "Atuação em perícias judiciais de vícios construtivos em condomínios residenciais de alto padrão. Elaboração de pareceres técnicos, quesitação e acompanhamento de vistorias com juízo.",
+            publicadoEm = "Há 1 dia"
+        ),
+        Vaga(
+            id = "vaga_02",
+            titulo = "Engenheiro de Gestão de Obras e Planejamento",
+            empresa = "Construtora Vanguarda",
+            local = "Belo Horizonte, MG (Presencial)",
+            tipo = "CLT",
+            descricao = "Coordenação de canteiro, cronograma físico-financeiro em MS Project, gestão de subempreiteiros e controle de qualidade de concreto e alvenaria estrutural.",
+            publicadoEm = "Há 3 dias"
+        ),
+        Vaga(
+            id = "vaga_03",
+            titulo = "Consultor Especialista em NBR 15575 (Acústica e Térmica)",
+            empresa = "LabDesempenho Engenharia",
+            local = "Remoto (Brasil)",
+            tipo = "Freelance",
+            descricao = "Modelagem e simulações computacionais de desempenho térmico e lumínico, além de medições de ruído aéreo e impacto in loco.",
+            publicadoEm = "Há 5 dias"
+        ),
+        Vaga(
+            id = "vaga_04",
+            titulo = "Estagiário de Engenharia Diagnóstica",
+            empresa = "TechLaudos Perícias",
+            local = "Curitiba, PR",
+            tipo = "Estágio",
+            descricao = "Apoio no preenchimento de checklists de inspeção predial (NBR 16747), triagem fotográfica e ensaios não destrutivos de esclerometria.",
+            publicadoEm = "Há 1 semana"
+        )
+    )
+
+    // ==========================================
+    // AGENDA DE EVENTOS E MASTERCLASSES
+    // ==========================================
+    val eventosMock = mutableListOf(
+        EventoAgenda(
+            id = "ev_01",
+            titulo = "Masterclass: Como Redigir Laudos que Blindam Honorários",
+            tipo = "Masterclass",
+            data = "12 de Setembro • 19:30",
+            local = "Google Meet (Ao vivo)",
+            palestrante = "Eng. Roberto Amorim",
+            descricao = "Técnicas avançadas de quesitação, estrutura de petição e fixação de honorários periciais segundo a tabela do IBAPE.",
+            encerrado = false
+        ),
+        EventoAgenda(
+            id = "ev_02",
+            titulo = "Workshop Prático: Diagnóstico de Infiltrações em Garagens",
+            tipo = "Workshop",
+            data = "24 de Setembro • 14:00 às 18:00",
+            local = "Transmissão Interativa Zoom",
+            palestrante = "Engª. Beatriz Albuquerque",
+            descricao = "Estudo de 8 casos reais de lixiviação, lençol freático e falha de impermeabilização com demonstração de ensaios.",
+            encerrado = false
+        ),
+        EventoAgenda(
+            id = "ev_03",
+            titulo = "Webinar: O Impacto da Nova Lei de Licitações 14.133",
+            tipo = "Webinar",
+            data = "28 de Agosto (Gravado)",
+            local = "Acesso Gravado na Plataforma",
+            palestrante = "Dr. Fábio Mendonça",
+            descricao = "Principais mudanças nas contratações públicas de obras de engenharia e novas exigências de projetos executivos.",
+            encerrado = true,
+            inscrito = true
+        )
+    )
+
+    // ==========================================
+    // GUIA DE CONSULTA (BÍBLIA DA EDIFICAÇÃO)
+    // ==========================================
+    val capitulosGuiaMock = listOf(
+        CapituloGuia(
+            id = "cap_01",
+            numero = 1,
+            titulo = "Alvenaria Estrutural com Blocos de Concreto",
+            categoria = "Sistemas Estruturais",
+            resumo = "Dimensionamento, modulação, grauteamento e controle de fissuração conforme NBR 16868.",
+            conteudoCompleto = """
+                A Alvenaria Estrutural é um sistema construtivo racionalizado onde as paredes têm dupla função: vedação e suporte de cargas verticais e horizontais.
+                
+                1. Materiais e Ensaios:
+                - Blocos de concreto vazados classes A, B e C (NBR 6136).
+                - Resistência característica à compressão do bloco (fbk) e do prisma (fpk).
+                - Argamassa de assentamento com elasticidade compatível para evitar tensões de cisalhamento prematuras.
+                
+                2. Grauteamento e Armaduras:
+                - Graute com abatimento fluido (slump entre 20 e 26 cm).
+                - Armaduras verticais ancoradas na fundação e armaduras horizontais em cintas de amarração contínuas.
+                
+                3. Patologias Frequentes:
+                - Fissuras verticais por dilatação térmica em lajes de cobertura (ausência de junta de dilatação).
+                - Eflorescência por umidade ascendente e lixiviação do cimento Portland.
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_02",
+            numero = 2,
+            titulo = "Estruturas de Concreto Armado Moldadas In Loco",
+            categoria = "Sistemas Estruturais",
+            resumo = "NBR 6118, classes de agressividade ambiental, cobrimento nominal e controle de fck.",
+            conteudoCompleto = """
+                O sistema de concreto armado convencional permanece como o mais difundido no mercado nacional.
+                
+                1. Diretrizes da NBR 6118:
+                - Definição da Classe de Agressividade Ambiental (CAA I a IV).
+                - Cobrimento nominal da armadura (c_nom) variando de 20 mm a 50 mm para garantia de vida útil de projeto (VUP).
+                
+                2. Controle Tecnológico:
+                - Rastreabilidade de usinagem, controle de relação água/cimento (a/c ≤ 0,55 em ambientes urbanos).
+                - Moldagem de corpos de prova (7 e 28 dias).
+                
+                3. Principais Manifestações Patológicas:
+                - Despassivação da armadura por carbonatação (frente de carbonatação profunda detectada por fenolftaleína).
+                - Corrosão sob ação de cloretos em regiões litorâneas com destacamento de cobrimento (spalling).
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_03",
+            numero = 3,
+            titulo = "Light Steel Framing (LSF)",
+            categoria = "Construção a Seco",
+            resumo = "Perfis de aço galvanizado formados a frio, fechamento com OSB e placas cimentícias.",
+            conteudoCompleto = """
+                O Light Steel Framing é um sistema industrializado, leve e sustentável, com montagem a seco.
+                
+                1. Componentes:
+                - Perfis estruturais galvanizados Z275 conformados a frio (montantes e guias).
+                - Fechamento externo com membranas hidrófugas (barreira de vapor/vento), placa OSB e placa cimentícia ou EIFS.
+                - Fechamento interno com gesso acartonado (drywall).
+                
+                2. Desempenho Acústico e Térmico (NBR 15575):
+                - Uso obrigatório de mantas de lã de vidro ou rocha no interior das cavidades para isolamento acústico ponderado Rw ≥ 45 dB.
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_04",
+            numero = 4,
+            titulo = "Parede de Concreto Maciço Moldada no Local",
+            categoria = "Sistemas Estruturais",
+            resumo = "Tecnologia para habitações de interesse social e larga escala conforme NBR 16055.",
+            conteudoCompleto = """
+                Sistema de paredes e lajes de concreto moldadas monoliticamente com formas metálicas ou de alumínio.
+                
+                1. Exigências de Projeto:
+                - Concreto autoadensável (CAA) com abatimento por espalhamento (slump flow ≥ 650 mm).
+                - Armadura em tela soldada central ou dupla para controle de retração plástica.
+                
+                2. Cuidados de Execução:
+                - Desmoldantes específicos e cura química rigorosa imediata à desforma para evitar fissuras mapeadas por perda rápida de água.
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_05",
+            numero = 5,
+            titulo = "Impermeabilização com Mantas Asfálticas e Membranas",
+            categoria = "Vedações e Proteções",
+            resumo = "NBR 9575 e NBR 9574, caimentos mínimos, regularização e teste de estanqueidade 72h.",
+            conteudoCompleto = """
+                A estanqueidade de coberturas, lajes de garagens e áreas molhadas depende da correta especificação de impermeabilização.
+                
+                1. Manta Asfáltica (Polímeros SBS ou APP):
+                - Espessura mínima de 4 mm com estruturante de poliéster.
+                - Caimento mínimo de 1% em direção aos ralos e condutores pluviais.
+                - Arredondamento de cantos vivos (meia-cana) com raio ≥ 5 cm.
+                
+                2. Teste de Estanqueidade:
+                - Lâmina de água mínima de 5 a 10 cm mantida por no mínimo 72 horas ininterruptas antes da camada de proteção mecânica.
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_06",
+            numero = 6,
+            titulo = "Fachadas Ventiladas e Painéis Cerâmicos Aderidos",
+            categoria = "Fachadas e Revestimentos",
+            resumo = "Juntas de dessolidarização e dilatação, argamassas colantes AC-III e ancoragens mecânicas.",
+            conteudoCompleto = """
+                Revestimentos de fachada sofrem elevados gradientes térmicos e esforços de cisalhamento causados pelo vento.
+                
+                1. Fachadas Aderidas:
+                - Uso obrigatório de argamassa colante AC-III com dupla colagem para placas com área superficial > 900 cm².
+                - Juntas de movimentação horizontais a cada andar e verticais a cada 6 metros.
+                
+                2. Fachadas Ventiladas:
+                - Câmara de ar contínua entre o substrato isolado e as placas de acabamento (granito, porcelanato ou ACM), gerando efeito chaminé para conforto térmico superior.
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_07",
+            numero = 7,
+            titulo = "Instalações Hidrossanitárias Prediais e Atenuação Acústica",
+            categoria = "Instalações",
+            resumo = "NBR 5626 e NBR 8160, tubulações de esgoto silenciosas e conexões com anel elastomérico.",
+            conteudoCompleto = """
+                1. Controle de Ruído (NBR 15575):
+                - Tubulações de esgoto em shafts que passam por dormitórios devem contar com isolamento em espuma elastomérica ou tubos minerais com densidade acústica elevada.
+                
+                2. Prevenção de Golpes de Aríete:
+                - Válvulas de descarga reguladas com pressões dinâmicas compatíveis e instalação de atenuadores de golpe nas colunas de prumada.
+            """.trimIndent()
+        ),
+        CapituloGuia(
+            id = "cap_08",
+            numero = 8,
+            titulo = "Fundações Profundas em Estacas Hélice Contínua e Tubulões",
+            categoria = "Geotecnia e Fundações",
+            resumo = "NBR 6122, controle de torque, ensaios de prova de carga estática e teste PIT.",
+            conteudoCompleto = """
+                1. Estacas Hélice Contínua Monitorada:
+                - Perfuração por trado helicoidal contínuo com injeção de concreto por bomba com monitoramento eletrônico de profundidade, pressão e volume de concreto por metro linear.
+                
+                2. Controle de Integridade:
+                - Realização de ensaio PIT (Pile Integrity Test) em 100% das estacas principais para detecção de estrangulamento, brocas ou descontinuidade de concreto.
+            """.trimIndent()
+        )
+    )
+
+    // ==========================================
+    // CÁLCULO DE ELEGIBILIDADE BANCÁRIA (VIABILIZA IA)
+    // ==========================================
+    data class ResultadoElegibilidadeBanco(
+        val banco: LinhaCreditoMock,
+        val elegivel: Boolean,
+        val motivo: String,
+        val valorFinanciamentoMax: Double,
+        val parcelaEstimada: Double
+    )
+
+    fun calcularElegibilidade(
+        idade: Int,
+        rendaMensal: Double,
+        custoTotal: Double,
+        valorFinanciarDesejado: Double
+    ): List<ResultadoElegibilidadeBanco> {
+        return linhasCreditoMock.map { linha ->
+            val comprometimentoMax = rendaMensal * 0.30 // 30% da renda máxima pela regra prudencial BACEN
+            val percentualMaxFinanc = custoTotal * (linha.percentualFinanciamentoMax / 100.0)
+            val idadeNoFim = idade + linha.prazoMaxAnos
+
+            val reprovacoes = mutableListOf<String>()
+
+            if (rendaMensal < linha.rendaMinima) {
+                reprovacoes.add("Renda mensal (R$ ${String.format("%,.2f", rendaMensal)}) inferior ao mínimo exigido (R$ ${String.format("%,.2f", linha.rendaMinima)})")
+            }
+
+            if (idadeNoFim > linha.idadeMaxima) {
+                val prazoMaximoPossivel = linha.idadeMaxima - idade
+                if (prazoMaximoPossivel < 5) {
+                    reprovacoes.add("Idade limite ultrapassada na amortização (máx. ${linha.idadeMaxima} anos)")
+                }
+            }
+
+            if (valorFinanciarDesejado > percentualMaxFinanc) {
+                reprovacoes.add("Valor solicitado excede o limite LTV de ${linha.percentualFinanciamentoMax}% do imóvel")
+            }
+
+            // Simulação de prestação Tabela SAC inicial estimada
+            val taxaMensal = (linha.taxaMin / 100.0) / 12.0
+            val prazoMeses = linha.prazoMaxAnos * 12
+            val amortizacao = valorFinanciarDesejado / prazoMeses
+            val jurosMes1 = valorFinanciarDesejado * taxaMensal
+            val primeiraParcela = amortizacao + jurosMes1
+
+            if (primeiraParcela > comprometimentoMax) {
+                reprovacoes.add("Parcela inicial (R$ ${String.format("%,.0f", primeiraParcela)}) excede 30% da renda declarada (R$ ${String.format("%,.0f", comprometimentoMax)})")
+            }
+
+            val elegivel = reprovacoes.isEmpty()
+            val motivo = if (elegivel) {
+                "Perfil aderente: LTV de até ${linha.percentualFinanciamentoMax}%, taxa nominal de ${linha.taxaMin}% a.a. e margem de renda aprovada."
+            } else {
+                reprovacoes.joinToString(". ")
+            }
+
+            ResultadoElegibilidadeBanco(
+                banco = linha,
+                elegivel = elegivel,
+                motivo = motivo,
+                valorFinanciamentoMax = minOf(valorFinanciarDesejado, percentualMaxFinanc),
+                parcelaEstimada = primeiraParcela
+            )
+        }.sortedByDescending { it.elegivel } // Elegíveis primeiro!
+    }
 }

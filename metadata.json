@@ -1,6 +1,6 @@
 {
   "name": "Comunidade Business 4.0",
-  "description": "App Android nativo da Comunidade Business 4.0 AmorimTech com Feed, Fórum, Cursos, Materiais e Perfil.",
+  "description": "App Android nativo da Comunidade Business 4.0 AmorimTech com Login fiel ao site real, 5 abas (Feed, Cursos, Agentes, Perfil, Mais), Catálogo de Agentes, Viabiliza IA e Certificação.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

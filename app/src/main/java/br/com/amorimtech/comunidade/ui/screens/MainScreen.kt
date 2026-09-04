@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import br.com.amorimtech.comunidade.data.mock.DadosMock
-import br.com.amorimtech.comunidade.data.model.Comentario
 import br.com.amorimtech.comunidade.data.model.Curso
 import br.com.amorimtech.comunidade.data.model.MaterialItem
 import br.com.amorimtech.comunidade.data.model.ModuloCurso
@@ -28,25 +27,46 @@ import br.com.amorimtech.comunidade.data.model.TopicoForum
 import br.com.amorimtech.comunidade.ui.components.AppBottomNavigationBar
 import br.com.amorimtech.comunidade.ui.components.AppTopBar
 import br.com.amorimtech.comunidade.ui.components.NavigationTab
+import br.com.amorimtech.comunidade.ui.screens.agents.AgentsScreen
 import br.com.amorimtech.comunidade.ui.screens.courses.CourseDetailScreen
 import br.com.amorimtech.comunidade.ui.screens.courses.CoursesScreen
+import br.com.amorimtech.comunidade.ui.screens.eventos.EventosScreen
 import br.com.amorimtech.comunidade.ui.screens.feed.FeedScreen
 import br.com.amorimtech.comunidade.ui.screens.feed.PostDetailScreen
 import br.com.amorimtech.comunidade.ui.screens.forum.ForumScreen
 import br.com.amorimtech.comunidade.ui.screens.forum.ForumTopicDetailScreen
+import br.com.amorimtech.comunidade.ui.screens.login.LoginScreen
 import br.com.amorimtech.comunidade.ui.screens.materials.MaterialsScreen
+import br.com.amorimtech.comunidade.ui.screens.more.MoreScreen
 import br.com.amorimtech.comunidade.ui.screens.profile.ProfileScreen
+import br.com.amorimtech.comunidade.ui.screens.vagas.VagasScreen
 
 sealed class ScreenDestination {
     object TabRoot : ScreenDestination()
     data class PostDetail(val postId: String) : ScreenDestination()
     data class ForumTopicDetail(val topicId: String) : ScreenDestination()
     data class CourseDetail(val courseId: String) : ScreenDestination()
+    object ForumRoot : ScreenDestination()
+    object MaterialsRoot : ScreenDestination()
+    object VagasRoot : ScreenDestination()
+    object EventosRoot : ScreenDestination()
 }
 
 @Composable
 fun MainScreen() {
-    var currentTab by remember { mutableStateOf(NavigationTab.FEED) }
+    var isLoggedIn by remember { mutableStateOf(false) }
+
+    if (!isLoggedIn) {
+        LoginScreen(
+            onLoginSuccess = {
+                isLoggedIn = true
+            }
+        )
+        return
+    }
+
+    // Default tab when entering the app is CURSOS
+    var currentTab by remember { mutableStateOf(NavigationTab.CURSOS) }
     var currentDestination by remember { mutableStateOf<ScreenDestination>(ScreenDestination.TabRoot) }
 
     // In-memory reactive state initialized from DadosMock
@@ -63,42 +83,75 @@ fun MainScreen() {
     val materiais = remember { mutableStateListOf(*DadosMock.materiais.toTypedArray()) }
 
     // Intercept back presses
-    BackHandler(enabled = currentDestination !is ScreenDestination.TabRoot || currentTab != NavigationTab.FEED) {
+    BackHandler(enabled = currentDestination !is ScreenDestination.TabRoot || currentTab != NavigationTab.CURSOS) {
         if (currentDestination !is ScreenDestination.TabRoot) {
             currentDestination = ScreenDestination.TabRoot
-        } else if (currentTab != NavigationTab.FEED) {
-            currentTab = NavigationTab.FEED
+        } else if (currentTab != NavigationTab.CURSOS) {
+            currentTab = NavigationTab.CURSOS
         }
     }
 
     Scaffold(
         topBar = {
-            if (currentDestination is ScreenDestination.TabRoot) {
-                when (currentTab) {
-                    NavigationTab.FEED -> AppTopBar(
-                        title = "Comunidade Business 4.0",
-                        subtitle = "Engenharia & Perícias AmorimTech",
-                        onSearchClick = {},
-                        onNotificationsClick = {}
-                    )
-                    NavigationTab.FORUM -> AppTopBar(
+            when (currentDestination) {
+                is ScreenDestination.ForumRoot -> {
+                    AppTopBar(
                         title = "Fórum Técnico",
                         subtitle = "Discussões e Casos Práticos",
-                        onSearchClick = {}
+                        onBackClick = { currentDestination = ScreenDestination.TabRoot }
                     )
-                    NavigationTab.CURSOS -> AppTopBar(
-                        title = "Cursos Executivos",
-                        subtitle = "Capacitação Contínua",
-                        onNotificationsClick = {}
-                    )
-                    NavigationTab.MATERIAIS -> AppTopBar(
+                }
+                is ScreenDestination.MaterialsRoot -> {
+                    AppTopBar(
                         title = "Acervo de Materiais",
-                        subtitle = "Planilhas, Laudos e Normas"
+                        subtitle = "Planilhas, Laudos e Checklists",
+                        onBackClick = { currentDestination = ScreenDestination.TabRoot }
                     )
-                    NavigationTab.PERFIL -> AppTopBar(
-                        title = "Meu Perfil",
-                        subtitle = "Credenciais e Conquistas"
+                }
+                is ScreenDestination.VagasRoot -> {
+                    AppTopBar(
+                        title = "Mural de Vagas",
+                        subtitle = "Oportunidades na Engenharia",
+                        onBackClick = { currentDestination = ScreenDestination.TabRoot }
                     )
+                }
+                is ScreenDestination.EventosRoot -> {
+                    AppTopBar(
+                        title = "Agenda de Eventos",
+                        subtitle = "Masterclasses e Webinars",
+                        onBackClick = { currentDestination = ScreenDestination.TabRoot }
+                    )
+                }
+                ScreenDestination.TabRoot -> {
+                    when (currentTab) {
+                        NavigationTab.FEED -> AppTopBar(
+                            title = "Comunidade Business 4.0",
+                            subtitle = "Engenharia & Perícias AmorimTech",
+                            onSearchClick = {},
+                            onNotificationsClick = {}
+                        )
+                        NavigationTab.CURSOS -> AppTopBar(
+                            title = "Cursos Executivos",
+                            subtitle = "Capacitação Contínua",
+                            onNotificationsClick = {}
+                        )
+                        NavigationTab.AGENTES -> AppTopBar(
+                            title = "Agentes de Engenharia",
+                            subtitle = "Automação e Diagnóstico com IA",
+                            onNotificationsClick = {}
+                        )
+                        NavigationTab.PERFIL -> AppTopBar(
+                            title = "Meu Perfil",
+                            subtitle = "Credenciais e Conquistas"
+                        )
+                        NavigationTab.MAIS -> AppTopBar(
+                            title = "Central de Recursos",
+                            subtitle = "Fórum, Vagas, Downloads e Eventos"
+                        )
+                    }
+                }
+                else -> {
+                    // Detalhes possuem suas próprias barras
                 }
             }
         },
@@ -171,7 +224,6 @@ fun MainScreen() {
                                     list.add(novaResposta)
                                     respostasMap[tId] = list.toMutableList()
 
-                                    // Update total answers in topic
                                     val topicoIdx = topicos.indexOfFirst { it.id == tId }
                                     if (topicoIdx != -1) {
                                         val t = topicos[topicoIdx]
@@ -211,6 +263,39 @@ fun MainScreen() {
                         }
                     }
 
+                    ScreenDestination.ForumRoot -> {
+                        ForumScreen(
+                            topicos = topicos,
+                            onOpenTopicDetail = { topico ->
+                                currentDestination = ScreenDestination.ForumTopicDetail(topico.id)
+                            },
+                            onAddNewTopic = { newTopic ->
+                                topicos.add(0, newTopic)
+                                respostasMap[newTopic.id] = mutableListOf()
+                            }
+                        )
+                    }
+
+                    ScreenDestination.MaterialsRoot -> {
+                        MaterialsScreen(
+                            materiais = materiais,
+                            onUnlockAccess = { matId ->
+                                val idx = materiais.indexOfFirst { it.id == matId }
+                                if (idx != -1) {
+                                    materiais[idx] = materiais[idx].copy(temAcesso = true)
+                                }
+                            }
+                        )
+                    }
+
+                    ScreenDestination.VagasRoot -> {
+                        VagasScreen()
+                    }
+
+                    ScreenDestination.EventosRoot -> {
+                        EventosScreen()
+                    }
+
                     ScreenDestination.TabRoot -> {
                         when (currentTab) {
                             NavigationTab.FEED -> FeedScreen(
@@ -235,17 +320,6 @@ fun MainScreen() {
                                 }
                             )
 
-                            NavigationTab.FORUM -> ForumScreen(
-                                topicos = topicos,
-                                onOpenTopicDetail = { topico ->
-                                    currentDestination = ScreenDestination.ForumTopicDetail(topico.id)
-                                },
-                                onAddNewTopic = { newTopic ->
-                                    topicos.add(0, newTopic)
-                                    respostasMap[newTopic.id] = mutableListOf()
-                                }
-                            )
-
                             NavigationTab.CURSOS -> CoursesScreen(
                                 cursos = cursos,
                                 onOpenCourseDetail = { curso ->
@@ -253,18 +327,32 @@ fun MainScreen() {
                                 }
                             )
 
-                            NavigationTab.MATERIAIS -> MaterialsScreen(
-                                materiais = materiais,
-                                onUnlockAccess = { matId ->
-                                    val idx = materiais.indexOfFirst { it.id == matId }
-                                    if (idx != -1) {
-                                        materiais[idx] = materiais[idx].copy(temAcesso = true)
-                                    }
-                                }
-                            )
+                            NavigationTab.AGENTES -> AgentsScreen()
 
                             NavigationTab.PERFIL -> ProfileScreen(
                                 usuario = DadosMock.usuarioAtual
+                            )
+
+                            NavigationTab.MAIS -> MoreScreen(
+                                onNavigateToFeed = {
+                                    currentTab = NavigationTab.FEED
+                                    currentDestination = ScreenDestination.TabRoot
+                                },
+                                onNavigateToForum = {
+                                    currentDestination = ScreenDestination.ForumRoot
+                                },
+                                onNavigateToMateriais = {
+                                    currentDestination = ScreenDestination.MaterialsRoot
+                                },
+                                onNavigateToVagas = {
+                                    currentDestination = ScreenDestination.VagasRoot
+                                },
+                                onNavigateToEventos = {
+                                    currentDestination = ScreenDestination.EventosRoot
+                                },
+                                onLogout = {
+                                    isLoggedIn = false
+                                }
                             )
                         }
                     }

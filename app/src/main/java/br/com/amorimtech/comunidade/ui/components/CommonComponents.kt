@@ -22,9 +22,11 @@ import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Feed
 import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayCircle
@@ -32,6 +34,7 @@ import androidx.compose.material.icons.filled.RssFeed
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
@@ -291,11 +294,11 @@ enum class NavigationTab(
     val icon: ImageVector,
     val testTag: String
 ) {
-    FEED("Feed", Icons.Default.RssFeed, "nav_feed"),
-    FORUM("Fórum", Icons.Default.Forum, "nav_forum"),
+    FEED("Feed", Icons.Default.Feed, "nav_feed"),
     CURSOS("Cursos", Icons.Default.School, "nav_cursos"),
-    MATERIAIS("Materiais", Icons.Default.MenuBook, "nav_materiais"),
-    PERFIL("Perfil", Icons.Default.Person, "nav_perfil")
+    AGENTES("Agentes", Icons.Default.SmartToy, "nav_agentes"),
+    PERFIL("Perfil", Icons.Default.Person, "nav_perfil"),
+    MAIS("Mais", Icons.Default.MoreHoriz, "nav_mais")
 }
 
 @Composable
